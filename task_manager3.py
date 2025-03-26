@@ -9,7 +9,7 @@ def get_task_files():
     files.sort(key=os.path.getmtime, reverse=False)
     return files
 
-def save_task(text):
+def save_task(text: str):
     """Save text to a new task file with current timestamp"""
     if not text.strip():
         return gr.update(), ""
@@ -17,8 +17,8 @@ def save_task(text):
     timestamp = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
     filename = f"task_{timestamp}.txt"
     
-    with open(filename, "w") as f:
-        f.write(text)
+    with open(filename, "wb") as f:
+        f.write(text.encode(encoding="utf-8"))
     
     return gr.update(choices=get_task_files()), ""
 
@@ -30,11 +30,11 @@ def show_task_content(file):
         return content, content  # Return both markdown and raw text
     return "", ""
 
-def save_edited_task(file, content):
+def save_edited_task(file, content: str):
     """Save edited content back to the file"""
     if file and os.path.exists(file):
-        with open(file, "w") as f:
-            f.write(content)
+        with open(file, "wb") as f:
+            f.write(content.encode(encoding="utf-8"))
         return gr.update(choices=get_task_files()), content, "Changes saved successfully!"
     return gr.update(), gr.update(), "Error saving changes!"
 
